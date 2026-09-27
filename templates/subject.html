@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ subject[1] }} | StudySense</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #668ba5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+
+        /* Subject intro */
+
+        .subject-intro {
+            background: #eaf6ff;
+            padding: 28px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .subject-intro h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .subject-intro p {
+            margin: 0;
+            color: #687984;
+        }
+
+
+        /* Add topic */
+
+        .add-topic-card {
+            background: #fff8d9;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 32px;
+        }
+
+        .add-topic-card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .add-topic-card p {
+            color: #777;
+            margin-top: 0;
+        }
+
+        .topic-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .topic-form input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #e2e2e2;
+            border-radius: 12px;
+            font: inherit;
+            background: white;
+        }
+
+        .topic-form button {
+            border: none;
+            padding: 13px 18px;
+            border-radius: 12px;
+            background: #dff1ff;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .topic-form button:hover {
+            background: #cfeaff;
+        }
+
+
+        /* Topics */
+
+        .topics-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .topics-heading h2 {
+            margin: 0;
+        }
+
+        .topics-heading span {
+            color: #888;
+            font-size: 14px;
+        }
+
+
+        .topic-item {
+            background: white;
+            border: 1px solid #eeeeee;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topic-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-name h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .topic-description {
+            margin: 10px 0 18px;
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        /* Delete */
+
+        .delete-button {
+            border: none;
+            background: #fff0f3;
+            color: #b85c70;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .delete-button:hover {
+            background: #ffe0e7;
+        }
+
+
+        /* Study session */
+
+        .session-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #6d7d87;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .session-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .session-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 11px;
+            font: inherit;
+        }
+
+        .session-form button {
+            border: none;
+            padding: 12px 16px;
+            border-radius: 11px;
+            background: #dff1ff;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .session-form button:hover {
+            background: #cfeaff;
+        }
+
+
+        /* Empty state */
+
+        .empty-box {
+            background: #f8fbfd;
+            border: 1px dashed #d9e3e9;
+            border-radius: 18px;
+            padding: 35px;
+            text-align: center;
+            color: #777;
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .topic-form,
+            .session-form {
+                flex-direction: column;
+            }
+
+            .topic-header {
+                align-items: flex-start;
+            }
+
+            .topics-heading {
+                align-items: flex-start;
+                gap: 8px;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            StudySense <span>✦</span>
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-item">
+                🏠 <span>Home</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- Main -->
+
+    <main class="main">
+
+
+        <a href="/" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <!-- Subject Header -->
+
+        <section class="subject-intro">
+
+            <h1>📚 {{ subject[1] }}</h1>
+
+            <p>
+                Keep track of what you're learning and how much you're studying.
+            </p>
+
+        </section>
+
+
+
+        <!-- Add Topic -->
+
+        <section class="add-topic-card">
+
+            <h2>Add a Topic</h2>
+
+            <p>
+                What do you want to study in this subject?
+            </p>
+
+            <form
+                action="/add_topic/{{ subject[0] }}"
+                method="POST"
+                class="topic-form"
+            >
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="e.g. Arrays, Recursion, Normalization..."
+                    required
+                >
+
+                <button type="submit">
+                    + Add Topic
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- Topics -->
+
+        <section>
+
+            <div class="topics-heading">
+
+                <h2>My Topics</h2>
+
+                <span>
+                    {{ topics|length }} topic{% if topics|length != 1 %}s{% endif %}
+                </span>
+
+            </div>
+
+
+            {% if topics %}
+
+
+                {% for topic in topics %}
+
+                    <div class="topic-item">
+
+
+                        <div class="topic-header">
+
+                            <div class="topic-name">
+
+                                <span>📖</span>
+
+                                <h3>
+                                    {{ topic[2] }}
+                                </h3>
+
+                            </div>
+
+
+                            <form
+                                action="/delete_topic/{{ topic[0] }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this topic and its study sessions?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="delete-button"
+                                >
+                                    🗑️ Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                        <p class="topic-description">
+                            Log your study time for this topic.
+                        </p>
+
+
+                        <span class="session-label">
+                            Study session
+                        </span>
+
+
+                        <form
+                            action="/add_session/{{ topic[0] }}"
+                            method="POST"
+                            class="session-form"
+                        >
+
+                            <input
+                                type="number"
+                                name="minutes"
+                                placeholder="Minutes studied"
+                                min="1"
+                                required
+                            >
+
+                            <input
+                                type="date"
+                                name="date"
+                                class="session-date"
+                                required
+                            >
+
+                            <button type="submit">
+                                Save Session
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            {% else %}
+
+                <div class="empty-box">
+
+                    📚
+
+                    <p>
+                        No topics yet.
+                    </p>
+
+                    <span>
+                        Add your first topic above and start learning! 🌱
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+    const today = new Date();
+
+    const localDate = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    )
+    .toISOString()
+    .split("T")[0];
+
+
+    document
+        .querySelectorAll(".session-date")
+        .forEach(input => {
+            input.value = localDate;
+        });
+
+</script>
+
+
+</body>
+
+</html>
