@@ -1,4 +1,5 @@
 # StudySense 📚
+🌐 **Live Demo:** https://KavyaEmani.pythonanywhere.com
 
 A student-focused study tracking web app for managing subjects, tracking study time, and staying on top of revision.
 
