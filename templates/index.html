@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudySense</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .subject-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subject-delete {
+            border: none;
+            background: #ffe8ed;
+            color: #b85c70;
+            padding: 8px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .subject-delete:hover {
+            background: #ffdce4;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            StudySense <span>✦</span>
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-item active">
+                🏠 <span>Home</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- Main Content -->
+
+    <main class="main">
+
+
+        <!-- Header -->
+
+        <header class="top">
+
+            <div>
+
+                <h1>
+                    Hey! Ready to study? 🌷
+                </h1>
+
+                <p>
+                    Let's make today a productive one.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+                👩🏻‍💻
+            </div>
+
+        </header>
+
+
+
+        <!-- Today's Progress -->
+
+        <section class="progress-card">
+
+            <div>
+
+                <span class="small-title">
+                    TODAY'S PROGRESS
+                </span>
+
+                <h2>
+
+                    {% if today_minutes >= 60 %}
+
+                        {{ today_minutes // 60 }}h
+
+                        {% if today_minutes % 60 %}
+                            {{ today_minutes % 60 }}m
+                        {% endif %}
+
+                    {% else %}
+
+                        {{ today_minutes }}m
+
+                    {% endif %}
+
+                    <span>/ 3h</span>
+
+                </h2>
+
+
+                <p>
+                    Keep going! Every minute counts. ✨
+                </p>
+
+            </div>
+
+
+            <div class="progress-circle">
+
+                {% set progress = ((today_minutes / 180) * 100) | round | int %}
+
+                {% if progress > 100 %}
+
+                    100%
+
+                {% else %}
+
+                    {{ progress }}%
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Dashboard Cards -->
+
+        <section class="cards">
+
+
+            <!-- My Topics -->
+
+            <div class="card blue">
+
+                <div class="card-title">
+
+                    <span>📚</span>
+
+                    <h3>
+                        My Topics
+                    </h3>
+
+                </div>
+
+
+                {% if dashboard_topics %}
+
+
+                    {% for topic in dashboard_topics[:4] %}
+
+                        <div class="task">
+
+                            <div>
+
+                                <strong>
+                                    {{ topic[2] }}
+                                </strong>
+
+                                <p>
+                                    {{ topic[1] }}
+                                </p>
+
+                            </div>
+
+                            <span>
+                                📖
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="task">
+
+                        <div>
+
+                            <strong>
+                                No topics yet
+                            </strong>
+
+                            <p>
+                                Add topics to start learning.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            🌱
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- Progress -->
+
+            <div class="card yellow">
+
+                <div class="card-title">
+
+                    <span>📊</span>
+
+                    <h3>
+                        Your Progress
+                    </h3>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Study Time
+                    </span>
+
+                    <strong>
+
+                        {% if today_minutes >= 60 %}
+
+                            {{ today_minutes // 60 }}h
+                            {{ today_minutes % 60 }}m
+
+                        {% else %}
+
+                            {{ today_minutes }}m
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Subjects
+                    </span>
+
+                    <strong>
+                        {{ subjects|length }}
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Revision Due
+                    </span>
+
+                    <strong>
+                        {{ revision_due|length }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Study Tip -->
+
+            <div class="card pink">
+
+                <div class="card-title">
+
+                    <span>💗</span>
+
+                    <h3>
+                        Study Tip
+                    </h3>
+
+                </div>
+
+
+                <p>
+                    Focus on one topic at a time and take short breaks
+                    between study sessions.
+                </p>
+
+
+                <p>
+                    Consistency matters more than studying everything
+                    in one day. 🌸
+                </p>
+
+            </div>
+
+
+
+            <!-- Revision -->
+
+            <div class="card white">
+
+                <div class="card-title">
+
+                    <span>🔁</span>
+
+                    <h3>
+                        Revision Due
+                    </h3>
+
+                </div>
+
+
+                {% if revision_due %}
+
+
+                    {% for item in revision_due %}
+
+                        <div class="revision">
+
+                            <div>
+
+                                <strong>
+                                    {{ item.subject }}
+                                </strong>
+
+                                <p>
+                                    {{ item.topic }}
+                                </p>
+
+                            </div>
+
+
+                            <span>
+                                {{ item.days }} days
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="revision">
+
+                        <span>
+                            Nothing to revise yet 🌿
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- Subjects -->
+
+        <section class="subjects">
+
+
+            <div class="section-heading">
+
+                <h2>
+                    My Subjects
+                </h2>
+
+                <span>
+                    Keep learning! 🌸
+                </span>
+
+            </div>
+
+
+
+            <div class="subject-list">
+
+
+                {% if subjects %}
+
+
+                    {% for subject in subjects %}
+
+                        <div class="subject-wrapper">
+
+
+                            <a
+                                href="/subject/{{ subject[0] }}"
+                                class="subject"
+                            >
+                                📘 {{ subject[1] }}
+                            </a>
+
+
+                            <form
+                                action="/delete_subject/{{ subject[0] }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this subject, its topics, and all study sessions?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="subject-delete"
+                                >
+                                    🗑️
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <p class="empty">
+                        No subjects yet. Add your first one below! 🌷
+                    </p>
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <!-- Add Subject -->
+
+            <div class="add-subject">
+
+                <form
+                    action="/add_subject"
+                    method="POST"
+                >
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Add a new subject..."
+                        required
+                    >
+
+                    <button type="submit">
+                        + Add Subject
+                    </button>
+
+                </form>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
